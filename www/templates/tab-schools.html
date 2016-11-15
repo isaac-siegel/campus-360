@@ -1,0 +1,16 @@
+<ion-view view-title="Schools">
+  <ion-content>
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="school in schools" type="item-text-wrap" href="#/tab/school-spheres/{{school.schoolId}}">
+        <img ng-src="{{school.face}}">
+        <h2>{{school.name}}</h2>
+        <p>{{school.schoolId}}</p>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+
+        <ion-option-button class="button-assertive" ng-click="remove(school)">
+          Delete
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
