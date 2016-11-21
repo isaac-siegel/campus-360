@@ -4,19 +4,19 @@
   The FriendsCtrl pulls data from the Friends service (service.js)
   The Friends service returns an array of friend data
 -->
-<ion-view view-title="Sphere">
+<ion-view view-title="{{sphere.school_name}}">
   <ion-content class="padding">
 
-    <p>
-      lat: {{sphere.lat}}
-    </p>
+    <!--<p>-->
+      <!--lat: {{sphere.lat}}-->
+    <!--</p>-->
 
-    <p>
-      lng: {{sphere.lng}}
-    </p>
+    <!--<p>-->
+      <!--lng: {{sphere.lng}}-->
+    <!--</p>-->
 
-    <div id="map" style="width: 1px; height: 1px;float:left;"></div>
-    <div id="pano" style="width: 200px; height: 200px;float:left"></div>
+    <div id="map" style="width: 1px; height: 1px;float:left; display: none"></div>
+    <div id="pano" style="width: 95vw; height: 80vh; margin: auto"></div>
 
 
   </ion-content>

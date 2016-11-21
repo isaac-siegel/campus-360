@@ -1,38 +1,23 @@
+// BASE_SERVER_URL = "http://127.0.0.1:5000"
+BASE_SERVER_URL = "http://siegelhorn.pythonanywhere.com"
+
+
+
 angular.module('starter.services', [])
 
-.factory('Schools', function() {
+.factory('Schools', function($http) {
   // Might use a resource here that returns a JSON array
 
-  // Some fake testing data
-  var schools = [{
-    id: 0,
-    schoolId: "someSchoolId",
-    name: 'UCLA',
-    lastText: 'You on your way?',
-    face: 'img/ben.png'
-  }, {
-    id: 1,
-    schoolId: "anotherSchoolId1",
-    name: 'USC',
-    lastText: 'Hey, it\'s me',
-    face: 'img/max.png'
-  }, {
-    id: 2,
-    schoolId: "anotherSchoolId2",
-    name: 'Cal Poly Pomona',
-    lastText: 'I should buy a boat',
-    face: 'img/adam.jpg'
-  }, {
-    id: 3,
-    schoolId: "anotherSchoolId3",
-    name: 'Cal Poly SLO',
-    lastText: 'Look at my mukluks!',
-    face: 'img/perry.png'
-  }];
+
+  // schools.then(function(data){console.log(data)},function(data){console.log(data)})
 
   return {
     all: function() {
-      return schools;
+      return $http({
+        method: 'GET',
+        url: BASE_SERVER_URL + '/get_schools/'
+      });
+
     },
     remove: function(school) {
       schools.splice(schools.indexOf(school), 1);
@@ -50,42 +35,55 @@ angular.module('starter.services', [])
 
 .factory('Spheres', function($http) {
   // Some fake testing data
+  var spheres = []
+  var spheres_cache = []
 
-  var spheres = [];
+  function upscale_thumbnail_urls(spheres){
+    for (var i = 0; i < spheres_cache.length; i++) {
+      sphere = spheres_cache[i]
+      split = sphere.thumbnail_url.split("/")
+
+      params = split[split.length - 2]
+      params = params.split("-")
+      params[0] = "w800"
+      params[1] = "h400"
+
+      split[split.length - 2] = params.join("-")
+      upscaled = split.join("/")
+      sphere.thumbnail_url = upscaled
+
+      spheres_cache[i] = sphere
+    }
+  }
 
   return {
     all: function(schoolId) {
+      console.log(schoolId)
 
-      var set_spheres = function(spheres_data){
-
-        // spheres = spheres_data;
-        spheres = [{
-          id: "sphereId1",
-          lat: '34.0569591',
-          lng: '-117.8206354',
-        }, {
-          id: "sphereId2",
-          lat: '34.0573394',
-          lng: '-117.8198981',
-        }]
-      }
-
-      var data = $http({
+      spheres = $http({
         method: 'GET',
-        url: '/get_spheres/schoolId'
-      })
+        url: BASE_SERVER_URL + '/get_spheres',
+        params: { school_id: schoolId }
+      }).then(function(data){
+        console.log(data)
+        spheres_cache = data.data
 
-      data.then(set_spheres,set_spheres)
+        upscale_thumbnail_urls(spheres_cache)
 
-      return data
+        return spheres_cache
+      });
+
+      return spheres
     },
     remove: function(sphere) {
       spheres.splice(spheres.indexOf(sphere), 1);
     },
     get: function(sphereId) {
-      for (var i = 0; i < spheres.length; i++) {
-        if (spheres[i].id == sphereId) {
-          return spheres[i];
+      console.log(spheres_cache)
+
+      for (var i = 0; i < spheres_cache.length; i++) {
+        if (spheres_cache[i]._id.$oid == sphereId) {
+          return spheres_cache[i];
         }
       }
       return null;

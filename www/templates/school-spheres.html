@@ -4,21 +4,27 @@
   The FriendsCtrl pulls data from the Friends service (service.js)
   The Friends service returns an array of friend data
 -->
-<ion-view view-title="All Spheres for School Name">
+<ion-view view-title="{{school_name}}">
   <ion-content class="padding">
-
     <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="sphere in spheres" type="item-text-wrap" href="#/tab/sphere/{{sphere.id}}">
-        <h2>{{sphere.id}}</h2>
-        <p>{{sphere.lat}}</p>
-        <p>{{sphere.lng}}</p>
 
-        <i class="icon ion-chevron-right icon-accessory"></i>
+      <div class="list card" ng-repeat="sphere in spheres" >
 
-        <ion-option-button class="button-assertive" ng-click="remove(school)">
-          Delete
-        </ion-option-button>
-      </ion-item>
+
+        <a href="#/tab/sphere/{{sphere._id.$oid}}">
+          <div class="item item-image" >
+            <img src="{{ sphere.thumbnail_url}}">
+          </div>
+
+
+
+          <a class="item item-icon-right assertive" href="#/tab/sphere/{{sphere._id.$oid}}">
+            <i class="icon ion-eye"></i>
+            0 Favorites &nbsp&nbsp&nbsp 0 Comments
+          </a>
+        </a>
+      </div>
+
     </ion-list>
 
 
