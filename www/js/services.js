@@ -58,14 +58,14 @@ angular.module('starter.services', [])
 
   return {
     all: function(schoolId) {
-      console.log(schoolId)
+      // console.log(schoolId)
 
       spheres = $http({
         method: 'GET',
         url: BASE_SERVER_URL + '/get_spheres',
         params: { school_id: schoolId }
       }).then(function(data){
-        console.log(data)
+        // console.log(data)
         spheres_cache = data.data
 
         upscale_thumbnail_urls(spheres_cache)

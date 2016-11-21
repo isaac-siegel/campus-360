@@ -11,7 +11,7 @@ angular.module('starter.controllers', [])
   //$scope.$on('$ionicView.enter', function(e) {
   //});
 
-  Schools.all().then(function(data){$scope.schools = data.data; console.log($scope.schools[0]._id.$oid) });
+  Schools.all().then(function(data){$scope.schools = data.data;});
 
   // $scope.schools.then(function(data){console.log(data)},function(data){console.log(data)})
 
@@ -25,7 +25,7 @@ angular.module('starter.controllers', [])
   Spheres.all($stateParams.schoolId).then(function(data){
     $scope.spheres = data
     $scope.school_name = data[0].school_name
-    console.log($window.innerHeight)
+    // console.log($window.innerHeight)
   });
 })
 

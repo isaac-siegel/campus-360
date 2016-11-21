@@ -12,16 +12,25 @@
 
 
         <a href="#/tab/sphere/{{sphere._id.$oid}}">
-          <div class="item item-image" >
-            <img src="{{ sphere.thumbnail_url}}">
+          <div class="item item-image" style="position: relative" >
+            <img src="{{ sphere.thumbnail_url}}" style="">
+
+            <div class="item item-avatar" style="position: absolute; z-index: 50; bottom: 0px; width: 100%; background: transparent; text-align: left; border:none; background-image: -webkit-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.6))">
+              <img src="http://lh5.googleusercontent.com/-4WxvatqaBoQ/AAAAAAAAAAI/AAAAAAAAVJs/NW8cTpmNbxk/s40-p-k-no-mo/photo.jpg">
+              <h2 style="color: white;   ">{{school_name}}</h2>
+              <p style="color: whitesmoke; ">Isaac Siegel</p>
+            </div>
           </div>
 
 
-
-          <a class="item item-icon-right assertive" href="#/tab/sphere/{{sphere._id.$oid}}">
-            <i class="icon ion-eye"></i>
-            0 Favorites &nbsp&nbsp&nbsp 0 Comments
+          <a class="item item-icon-right assertive" href="#" style="position: absolute; top: 10px; right: 0px; background: transparent; border:none; color: white">
+            <i class="icon ion-ios-star-outline"></i>
           </a>
+
+          <!--<a class="item item-icon-right assertive" href="#/tab/sphere/{{sphere._id.$oid}}">-->
+            <!--<i class="icon ion-eye"></i>-->
+            <!--0 Favorites &nbsp&nbsp&nbsp 0 Comments-->
+          <!--</a>-->
         </a>
       </div>
 
