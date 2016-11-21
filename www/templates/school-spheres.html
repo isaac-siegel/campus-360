@@ -16,9 +16,9 @@
             <img src="{{ sphere.thumbnail_url}}" style="">
 
             <div class="item item-avatar" style="position: absolute; z-index: 50; bottom: 0px; width: 100%; background: transparent; text-align: left; border:none; background-image: -webkit-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.6))">
-              <img src="http://lh5.googleusercontent.com/-4WxvatqaBoQ/AAAAAAAAAAI/AAAAAAAAVJs/NW8cTpmNbxk/s40-p-k-no-mo/photo.jpg">
+              <img src="{{sphere.uploader.photo_url}}">
               <h2 style="color: white;   ">{{school_name}}</h2>
-              <p style="color: whitesmoke; ">Isaac Siegel</p>
+              <p style="color: whitesmoke; ">{{sphere.uploader.name}}</p>
             </div>
           </div>
 
