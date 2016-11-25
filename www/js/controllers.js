@@ -20,19 +20,76 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('SchoolSpheresCtrl', function($scope, $stateParams, Spheres, $window) {
+.controller('SchoolSpheresCtrl', function($scope, $stateParams, $window, Spheres, SavedFavorites) {
 
   Spheres.all($stateParams.schoolId).then(function(data){
     $scope.spheres = data
     $scope.school_name = data[0].school_name
-    // console.log($window.innerHeight)
   });
+
+  $scope.$on('$ionicView.enter', function(e) {
+    var saved_favorites = SavedFavorites.all();
+
+    $scope.save_favorite = function (sphere_id) {
+      saved_favorites = SavedFavorites.all();
+      saved_favorites.push(sphere_id);
+      SavedFavorites.save(saved_favorites);
+      saved_favorites = SavedFavorites.all();
+    };
+
+    $scope.unsave_favorite = function (sphere_id) {
+      saved_favorites = SavedFavorites.all();
+
+      var index = saved_favorites.indexOf(sphere_id);
+      if (index !== -1) {
+        saved_favorites.splice(index, 1);
+      }
+
+      SavedFavorites.save(saved_favorites);
+      saved_favorites = SavedFavorites.all();
+    };
+
+    $scope.is_favorited = function (sphere_id) {
+      return saved_favorites.indexOf(sphere_id) != -1
+    };
+  });
+
 })
 
-.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
+.controller('FavoritesCtrl', function($scope, Favorites, SavedFavorites) {
+  $scope.$on('$ionicView.enter', function(e) {
+    var saved_favorites = SavedFavorites.all();
+
+    Favorites.all(saved_favorites).then(function(data){$scope.spheres = data; })
+
+    var saved_favorites = SavedFavorites.all();
+
+    $scope.save_favorite = function(sphere_id){
+      saved_favorites = SavedFavorites.all();
+      saved_favorites.push(sphere_id);
+      SavedFavorites.save(saved_favorites);
+      saved_favorites = SavedFavorites.all();
+    };
+
+    $scope.unsave_favorite = function(sphere_id){
+      saved_favorites = SavedFavorites.all();
+
+      var index = saved_favorites.indexOf(sphere_id);
+      if (index !== -1) {
+        saved_favorites.splice(index, 1);
+      }
+
+      SavedFavorites.save(saved_favorites);
+      saved_favorites = SavedFavorites.all();
+
+      Favorites.all(saved_favorites).then(function(data){$scope.spheres = data; })
+    };
+
+    $scope.is_favorited = function(sphere_id) {
+      return saved_favorites.indexOf(sphere_id) != -1
+    };
+
+  });
 })
 
 .controller('SphereCtrl', function($scope, $stateParams, Spheres) {
@@ -51,57 +108,74 @@ angular.module('starter.controllers', [])
     initMap(Number($scope.sphere.lat), Number($scope.sphere.lng) )
   });
 
+})
 
+.controller('FavoritesSphereCtrl', function($scope, $stateParams, Favorites) {
+  $scope.$on('$ionicView.enter', function(e) {
+    console.log("hi")
 
-  function initMap(sphere_lat, sphere_lng) {
-    console.log("INIT MAP")
+    var sphereId = $stateParams.sphereId;
 
-    var coords = {lat: sphere_lat, lng: sphere_lng };
-    var sv = new google.maps.StreetViewService();
+    console.log(sphereId);
 
-    panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'));
+    $scope.sphere = Favorites.get(sphereId);
 
-    // umbrella_pano = "F:-EvM02VL6Jlw/VxPGGPeiyFI/AAAAAAAAV3Q/eSYacYrZWaEAXvUziqwo46glV9EhfJ8NQCJkC"
-    // panorama.setPano(umbrella_pano)
+    var map;
+    var panorama;
 
-    // Set the initial Street View camera to the center of the map
-    sv.getPanorama({location: coords, radius: 50}, processSVData);
-
-    // Look for a nearby Street View panorama when the map is clicked.
-    // getPanoramaByLocation will return the nearest pano when the
-    // given radius is 50 meters or less.
-  }
-
-  function processSVData(data, status) {
-    if (status === 'OK') {
-      // var marker = new google.maps.Marker({
-      //   position: data.location.latLng,
-      //   map: map,
-      //   title: data.location.description
-      // });
-
-      panorama.setPano(data.location.pano);
-
-      panorama.setPano()
-      panorama.setPov({
-        heading: 270,
-        pitch: 0
-      });
-      panorama.setVisible(true);
-
-      // marker.addListener('click', function() {
-      //   var markerPanoID = data.location.pano;
-      //   // Set the Pano to use the passed panoID.
-      //   panorama.setPano(markerPanoID);
-      //   panorama.setPov({
-      //     heading: 270,
-      //     pitch: 0
-      //   });
-      //   panorama.setVisible(true);
-      // });
-    } else {
-      console.error('Street View data not found for this location.');
-    }
-  }
+    initMap(Number($scope.sphere.lat), Number($scope.sphere.lng) )
+  });
 
 });
+
+
+function initMap(sphere_lat, sphere_lng) {
+  console.log("INIT MAP")
+
+  var coords = {lat: sphere_lat, lng: sphere_lng };
+  var sv = new google.maps.StreetViewService();
+
+  panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'));
+
+  // umbrella_pano = "F:-EvM02VL6Jlw/VxPGGPeiyFI/AAAAAAAAV3Q/eSYacYrZWaEAXvUziqwo46glV9EhfJ8NQCJkC"
+  // panorama.setPano(umbrella_pano)
+
+  // Set the initial Street View camera to the center of the map
+  sv.getPanorama({location: coords, radius: 50}, processSVData);
+
+  // Look for a nearby Street View panorama when the map is clicked.
+  // getPanoramaByLocation will return the nearest pano when the
+  // given radius is 50 meters or less.
+}
+
+function processSVData(data, status) {
+  if (status === 'OK') {
+    // var marker = new google.maps.Marker({
+    //   position: data.location.latLng,
+    //   map: map,
+    //   title: data.location.description
+    // });
+
+    panorama.setPano(data.location.pano);
+
+    panorama.setPano()
+    panorama.setPov({
+      heading: 270,
+      pitch: 0
+    });
+    panorama.setVisible(true);
+
+    // marker.addListener('click', function() {
+    //   var markerPanoID = data.location.pano;
+    //   // Set the Pano to use the passed panoID.
+    //   panorama.setPano(markerPanoID);
+    //   panorama.setPov({
+    //     heading: 270,
+    //     pitch: 0
+    //   });
+    //   panorama.setVisible(true);
+    // });
+  } else {
+    console.error('Street View data not found for this location.');
+  }
+}

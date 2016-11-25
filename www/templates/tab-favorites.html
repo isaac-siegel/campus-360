@@ -1,17 +1,11 @@
-<!--
-  This template loads for the 'tab.friend-detail' state (app.js)
-  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
-  The FriendsCtrl pulls data from the Friends service (service.js)
-  The Friends service returns an array of friend data
--->
-<ion-view view-title="{{school_name}}">
-  <ion-content class="padding">
+<ion-view view-title="Favorites">
+  <ion-content>
     <ion-list>
 
       <div class="list card" ng-repeat="sphere in spheres" >
 
 
-        <a href="#/tab/sphere/{{sphere._id.$oid}}">
+        <a href="#/tab/favorites-sphere/{{sphere._id.$oid}}">
           <div class="item item-image" style="position: relative" >
             <img src="{{ sphere.thumbnail_url}}" style="">
 
@@ -31,16 +25,10 @@
             <i class="icon ion-ios-star"></i>
           </a>
 
-
-          <!--<a class="item item-icon-right assertive" href="#/tab/sphere/{{sphere._id.$oid}}">-->
-            <!--<i class="icon ion-eye"></i>-->
-            <!--0 Favorites &nbsp&nbsp&nbsp 0 Comments-->
-          <!--</a>-->
         </a>
       </div>
 
+
     </ion-list>
-
-
   </ion-content>
 </ion-view>

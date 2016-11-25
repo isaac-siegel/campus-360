@@ -87,13 +87,22 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         }
       }
     })
+    .state('tab.favorites-sphere', {
+      url: '/favorites-sphere/:sphereId',
+      views: {
+        'tab-favorites': {
+          templateUrl: 'templates/sphere.html',
+          controller: 'FavoritesSphereCtrl'
+        }
+      }
+    })
 
-  .state('tab.account', {
-    url: '/account',
+  .state('tab.favorites', {
+    url: '/favorites',
     views: {
-      'tab-account': {
-        templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
+      'tab-favorites': {
+        templateUrl: 'templates/tab-favorites.html',
+        controller: 'FavoritesCtrl'
       }
     }
   });
