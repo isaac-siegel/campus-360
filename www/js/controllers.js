@@ -1,6 +1,42 @@
+// BASE_SERVER_URL = "http://127.0.0.1:5000"
+BASE_SERVER_URL = "http://siegelhorn.pythonanywhere.com"
+
+
 angular.module('starter.controllers', [])
 
-.controller('HomeCtrl', function($scope) {})
+.controller('HomeCtrl', function($scope, SavedFavorites, Featured) {
+  Featured.all().then(function(data){
+    $scope.spheres = data
+  });
+
+  var saved_favorites = SavedFavorites.all();
+
+  $scope.save_favorite = function(sphere_id){
+    saved_favorites = SavedFavorites.all();
+    saved_favorites.push(sphere_id);
+    SavedFavorites.save(saved_favorites);
+    saved_favorites = SavedFavorites.all();
+  };
+
+  $scope.unsave_favorite = function(sphere_id){
+    saved_favorites = SavedFavorites.all();
+
+    var index = saved_favorites.indexOf(sphere_id);
+    if (index !== -1) {
+      saved_favorites.splice(index, 1);
+    }
+
+    SavedFavorites.save(saved_favorites);
+    saved_favorites = SavedFavorites.all();
+
+    Favorites.all(saved_favorites).then(function(data){$scope.spheres = data; })
+  };
+
+  $scope.is_favorited = function(sphere_id) {
+    return saved_favorites.indexOf(sphere_id) != -1
+  };
+
+})
 
 .controller('SchoolsCtrl', function($scope, Schools) {
   // With the new view caching in Ionic, Controllers are only called
@@ -92,7 +128,7 @@ angular.module('starter.controllers', [])
   });
 })
 
-.controller('SphereCtrl', function($scope, $stateParams, Spheres) {
+.controller('SphereCtrl', function($scope, $stateParams, Spheres, $http) {
 
   $scope.$on('$ionicView.enter', function(e) {
 
@@ -102,6 +138,16 @@ angular.module('starter.controllers', [])
 
     $scope.sphere = Spheres.get(sphereId);
 
+    // $scope.delete_sphere = function(){
+    //   console.log("SUP")
+    //   return $http({
+    //     method: 'GET',
+    //     url: BASE_SERVER_URL + '/delete_sphere',
+    //     params: { sphere_id: sphereId }
+    //   })
+    //
+    // }
+
     var map;
     var panorama;
 
@@ -110,7 +156,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('FavoritesSphereCtrl', function($scope, $stateParams, Favorites) {
+.controller('FavoritesSphereCtrl', function($scope, $stateParams, Favorites, $http) {
   $scope.$on('$ionicView.enter', function(e) {
     console.log("hi")
 
@@ -120,13 +166,36 @@ angular.module('starter.controllers', [])
 
     $scope.sphere = Favorites.get(sphereId);
 
+
+
+
     var map;
     var panorama;
 
     initMap(Number($scope.sphere.lat), Number($scope.sphere.lng) )
   });
 
-});
+})
+
+.controller('FeaturedSphereCtrl', function($scope, $stateParams, Featured, $http) {
+    $scope.$on('$ionicView.enter', function(e) {
+
+      var sphereId = $stateParams.sphereId;
+
+      console.log(sphereId);
+
+      $scope.sphere = Featured.get(sphereId);
+
+
+
+      var map;
+      var panorama;
+
+      initMap(Number($scope.sphere.lat), Number($scope.sphere.lng) )
+    });
+
+  });
+
 
 
 function initMap(sphere_lat, sphere_lng) {
@@ -135,7 +204,22 @@ function initMap(sphere_lat, sphere_lng) {
   var coords = {lat: sphere_lat, lng: sphere_lng };
   var sv = new google.maps.StreetViewService();
 
-  panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'));
+  panorama = new google.maps.StreetViewPanorama(
+    document.getElementById('pano'),
+    {
+      addressControlOptions: {
+        position: google.maps.ControlPosition.BOTTOM_CENTER
+      },
+      addressControl: false,
+      linksControl: false,
+      panControl: false,
+      enableCloseButton: false,
+      zoomControl: false,
+      fullscreenControl: false,
+      motionTrackingControl: false
+    }
+
+  );
 
   // umbrella_pano = "F:-EvM02VL6Jlw/VxPGGPeiyFI/AAAAAAAAV3Q/eSYacYrZWaEAXvUziqwo46glV9EhfJ8NQCJkC"
   // panorama.setPano(umbrella_pano)

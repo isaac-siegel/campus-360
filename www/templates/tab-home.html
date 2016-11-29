@@ -7,5 +7,36 @@
       </div>
     </div>
 
+    <ion-list>
+
+      <div class="list card" ng-repeat="sphere in spheres" >
+
+
+        <a href="#/tab/featured-sphere/{{sphere._id.$oid}}">
+          <div class="item item-image" style="position: relative" >
+            <img src="{{ sphere.thumbnail_url}}" style="">
+
+            <div class="item item-avatar" style="position: absolute; z-index: 50; bottom: 0px; width: 100%; background: transparent; text-align: left; border:none; background-image: -webkit-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,.6))">
+              <img src="{{sphere.uploader.photo_url}}">
+              <h2 style="color: white;   ">{{sphere.school_name}}</h2>
+              <p style="color: whitesmoke; ">{{sphere.uploader.name}}</p>
+            </div>
+          </div>
+
+
+          <a class="item item-icon-right assertive" ng-hide="is_favorited(sphere._id.$oid)" ng-click="save_favorite(sphere._id.$oid)" style="position: absolute; top: 10px; right: 0px; background: transparent; border:none; color: white">
+            <i class="icon ion-ios-star-outline" ></i>
+          </a>
+
+          <a class="item item-icon-right assertive" ng-show="is_favorited(sphere._id.$oid)" ng-click="unsave_favorite(sphere._id.$oid)" style="position: absolute; top: 10px; right: 0px; background: transparent; border:none; color: white">
+            <i class="icon ion-ios-star"></i>
+          </a>
+
+        </a>
+      </div>
+
+
+    </ion-list>
+
   </ion-content>
 </ion-view>

@@ -96,6 +96,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         }
       }
     })
+    .state('tab.featured-sphere', {
+      url: '/featured-sphere/:sphereId',
+      views: {
+        'tab-home': {
+          templateUrl: 'templates/sphere.html',
+          controller: 'FeaturedSphereCtrl'
+        }
+      }
+    })
 
   .state('tab.favorites', {
     url: '/favorites',
@@ -112,5 +121,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
   $ionicConfigProvider.tabs.position('bottom'); // other values: top
 
+  $ionicConfigProvider.navBar.alignTitle('center')
+
+  $ionicConfigProvider.backButton.text('Back')
 
 });
